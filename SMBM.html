@@ -1,0 +1,1578 @@
+
+<html lang="zh-CN"></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMBM密态人工智能计算平台</title>
+    <!-- TailwindCSS 通过CDN引入 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome 通过CDN引入 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        accent: {
+                            500: '#FF7A00',
+                            600: '#E26C00',
+                        },
+                    },
+                    fontFamily: {
+                        sans: ['"Inter"', 'sans-serif'],
+                    },
+                    fontSize: {
+                        'massive': '4.5rem',
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        /* 定义自定义动画 */
+        @keyframes floating {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes pulse-slow {
+
+            0%,
+            100% {
+                opacity: 0.8;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 渐变背景 */
+        .gradient-bg {
+            background: linear-gradient(130deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        .gradient-bg-accent {
+            background: linear-gradient(90deg, #FF7A00 0%, #FF9541 100%);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #FF7A00, #FFBF00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* 动画类 */
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        .floating-slow {
+            animation: floating 8s ease-in-out infinite;
+        }
+
+        .pulse-slow {
+            animation: pulse-slow 4s ease-in-out infinite;
+        }
+
+        .fade-up {
+            animation: fadeUp 0.8s ease-out forwards;
+        }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+
+        /* 3D 卡片效果 */
+        .card-3d {
+            transition: transform 0.5s ease;
+            transform-style: preserve-3d;
+        }
+
+        .card-3d:hover {
+            transform: translateY(-10px) rotateX(5deg);
+        }
+
+        /* 网格背景 */
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(30, 41, 59, 0.7) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 41, 59, 0.7) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center center;
+        }
+
+        /* 全局过渡效果 */
+        * {
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, opacity 0.3s, transform 0.3s;
+        }
+
+        /* 改进图片加载 */
+        img,
+        svg {
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        img.loaded,
+        svg.loaded {
+            opacity: 1;
+        }
+
+        /* 数字指示器 */
+        .numbered-badge:before {
+            counter-increment: section;
+            content: counter(section);
+        }
+
+        /* 导航动画 */
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #FF7A00;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans antialiased">
+    <div id="page-wrapper" class="min-h-screen overflow-hidden flex flex-col">
+        <!-- 固定导航栏 -->
+        <header class="fixed w-full top-0 z-50 backdrop-blur-md bg-gray-900/90 border-b border-gray-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
+                    <!-- Logo -->
+                    <div class="flex items-center space-x-4">
+                        <a href="#" class="flex items-center space-x-3">
+                            <div class="h-10 w-10 bg-accent-500 rounded-md flex items-center justify-center">
+                                <span class="text-white font-bold text-lg">SM</span>
+                            </div>
+                            <span class="text-xl font-bold text-white">SMBM</span>
+                        </a>
+                    </div>
+
+                    <!-- 导航链接 -->
+                    <nav class="hidden lg:flex items-center space-x-8">
+                        <a href="#overview"
+                            class="nav-link text-gray-300 hover:text-white font-medium text-sm tracking-wide">概览</a>
+                        <a href="#business-logic"
+                            class="nav-link text-gray-300 hover:text-white font-medium text-sm tracking-wide">业务逻辑</a>
+                        <a href="#market-status"
+                            class="nav-link text-gray-300 hover:text-white font-medium text-sm tracking-wide">市场现状</a>
+                        <a href="#solutions"
+                            class="nav-link text-gray-300 hover:text-white font-medium text-sm tracking-wide">解决方案</a>
+                        <a href="#scenarios"
+                            class="nav-link text-gray-300 hover:text-white font-medium text-sm tracking-wide">适用场景</a>
+                        <a href="#business-model"
+                            class="nav-link text-gray-300 hover:text-white font-medium text-sm tracking-wide">业务模式</a>
+                    </nav>
+
+                    <!-- 右侧按钮 -->
+                    <div class="flex items-center space-x-4">
+                        <a href="#contact-us"
+                            class="hidden md:inline-flex items-center justify-center px-6 py-2 border border-accent-500 text-accent-500 hover:bg-accent-500 hover:text-white font-medium rounded-md transition-colors shadow-sm">
+                            联系我们
+                        </a>
+                        <button id="mobile-menu-button"
+                            class="lg:hidden p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 移动端菜单 -->
+            <div id="mobile-menu" class="hidden lg:hidden border-t border-gray-800 bg-gray-900/95 backdrop-blur-md">
+                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                    <a href="#overview"
+                        class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-md">概览</a>
+                    <a href="#business-logic"
+                        class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-md">业务逻辑</a>
+                    <a href="#market-status"
+                        class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-md">市场现状</a>
+                    <a href="#solutions"
+                        class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-md">解决方案</a>
+                    <a href="#scenarios"
+                        class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-md">适用场景</a>
+                    <a href="#business-model"
+                        class="block px-3 py-3 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-md">业务模式</a>
+                    <a href="#contact-us"
+                        class="block px-3 py-3 text-base font-medium text-accent-500 hover:text-white hover:bg-accent-500 rounded-md mt-4">联系我们</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主内容 -->
+        <main class="flex-grow pt-20">
+            <!-- 英雄区域 -->
+            <section id="overview" class="relative min-h-full grid-bg gradient-bg overflow-hidden">
+                <!-- 背景装饰元素 -->
+                <div class="absolute inset-0 overflow-hidden">
+                    <div class="absolute top-1/4 -left-10 w-40 h-40 bg-accent-500/20 rounded-full blur-3xl pulse-slow">
+                    </div>
+                    <div
+                        class="absolute bottom-1/3 right-1/4 w-60 h-60 bg-blue-500/20 rounded-full blur-3xl pulse-slow">
+                    </div>
+                </div>
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 relative z-10">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <!-- 文字部分 -->
+                        <div class="space-y-8 delay-[200ms] fade-up">
+                            <div
+                                class="inline-block px-4 py-1 bg-accent-500/10 text-accent-500 font-semibold rounded-full text-sm">
+                                SMBM 密态计算
+                            </div>
+                            <h1
+                                class="text-4xl sm:text-5xl lg:text-6xl xl:text-massive font-extrabold text-white leading-tight">
+                                密态<span class="gradient-text">人工智能</span><br />计算平台
+                            </h1>
+                            <p class="text-xl text-gray-300 max-w-2xl">
+                                一种安全高效易用的智能大数据流通工具，解决数据隐私与计算效率难题
+                            </p>
+                            <div class="flex flex-wrap gap-4 pt-4">
+                                <a href="#business-logic"
+                                    class="inline-flex items-center px-8 py-3 bg-accent-500 hover:bg-accent-600 text-white font-medium rounded-md shadow-lg hover:shadow-accent-500/30 transition-all">
+                                    探索解决方案
+                                    <i class="fas fa-arrow-right ml-2"></i>
+                                </a>
+                                <a href="#scenarios"
+                                    class="inline-flex items-center px-8 py-3 bg-gray-800 hover:bg-gray-700 text-white font-medium rounded-md shadow-lg transition-all">
+                                    查看应用场景
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- 视觉部分 -->
+                        <div class="relative flex justify-center delay-[400ms] fade-up">
+                            <div class="relative w-full max-w-lg">
+                                <!-- 主视觉元素 -->
+                                <div
+                                    class="bg-gray-800/80 backdrop-blur-md rounded-2xl p-6 border border-gray-700 shadow-2xl floating">
+                                    <div
+                                        class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl p-8 shadow-inner">
+                                        <div class="flex flex-col items-center space-y-6">
+                                            <!-- LOGO -->
+                                            <div
+                                                class="h-16 w-16 bg-accent-500 rounded-xl flex items-center justify-center shadow-lg shadow-accent-500/20">
+                                                <span class="text-white font-bold text-2xl">SM</span>
+                                            </div>
+
+                                            <div class="w-full mt-6 space-y-6">
+                                                <!-- 数据流可视化 -->
+                                                <div
+                                                    class="relative h-24 bg-gray-700/50 rounded-lg p-4 overflow-hidden">
+                                                    <div class="absolute inset-0 flex items-center">
+                                                        <div class="w-full flex justify-between px-4">
+                                                            <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                                            <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                                            <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                                            <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                                            <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="absolute inset-0 flex items-center justify-center">
+                                                        <div class="text-center">
+                                                            <div class="text-accent-500 font-bold text-lg">密态计算</div>
+                                                            <div class="text-gray-400 text-xs">数据安全流通</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 标签卡片 -->
+                                                <div class="grid grid-cols-2 gap-4">
+                                                    <div
+                                                        class="bg-gray-700/30 border border-gray-700 p-3 rounded-lg text-center">
+                                                        <div class="text-accent-500 text-sm font-semibold mb-1">隐私计算
+                                                        </div>
+                                                        <div class="text-gray-400 text-xs">保护数据安全</div>
+                                                    </div>
+                                                    <div
+                                                        class="bg-gray-700/30 border border-gray-700 p-3 rounded-lg text-center">
+                                                        <div class="text-accent-500 text-sm font-semibold mb-1">大模型
+                                                        </div>
+                                                        <div class="text-gray-400 text-xs">智能分析处理</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 装饰元素1 -->
+                                <div
+                                    class="absolute -top-4 -right-4 w-20 h-20 bg-blue-500/20 rounded-full blur-xl floating-slow">
+                                </div>
+
+                                <!-- 装饰元素2 -->
+                                <div
+                                    class="absolute -bottom-6 -left-6 w-24 h-24 bg-accent-500/20 rounded-full blur-xl floating">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 向下滚动指示 -->
+                    <!-- <div
+                        class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center space-y-2 fade-up">
+                        <span class="text-gray-400 text-sm">向下滚动探索</span>
+                        <div class="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center p-1">
+                            <div class="w-1.5 h-1.5 bg-accent-500 rounded-full animate-bounce"></div>
+                        </div>
+                    </div> -->
+                </div>
+            </section>
+
+            <!-- 特点概览部分 -->
+            <section class="bg-gray-900 py-24">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-3xl mx-auto mb-16 fade-up">
+                        <div
+                            class="inline-block px-4 py-1 bg-accent-500/10 text-accent-500 font-semibold rounded-full text-sm mb-4">
+                            革命性技术
+                        </div>
+                        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">密态人工智能计算平台的核心优势</h2>
+                        <p class="text-gray-400 text-lg">
+                            集合安全、高效、易用三大特性，打破数据孤岛，释放数据价值
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- 特点1 -->
+                        <div class="card-3d bg-gray-800 rounded-2xl p-6 border border-gray-700 fade-up">
+                            <div class="h-12 w-12 bg-accent-500/10 rounded-lg flex items-center justify-center mb-6">
+                                <i class="fas fa-shield-alt text-accent-500 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-3">数据安全保障</h3>
+                            <p class="text-gray-400">
+                                采用先进密态计算技术，确保数据在使用过程中不泄露敏感信息，解决数据共享与隐私保护的矛盾
+                            </p>
+                        </div>
+
+                        <!-- 特点2 -->
+                        <div class="card-3d bg-gray-800 rounded-2xl p-6 border border-gray-700 fade-up delay-[200ms]">
+                            <div class="h-12 w-12 bg-accent-500/10 rounded-lg flex items-center justify-center mb-6">
+                                <i class="fas fa-bolt text-accent-500 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-3">高性能计算</h3>
+                            <p class="text-gray-400">
+                                优化算力调度与分配，突破传统隐私计算的性能瓶颈，实现大规模数据的高效处理
+                            </p>
+                        </div>
+
+                        <!-- 特点3 -->
+                        <div class="card-3d bg-gray-800 rounded-2xl p-6 border border-gray-700 fade-up delay-[400ms]">
+                            <div class="h-12 w-12 bg-accent-500/10 rounded-lg flex items-center justify-center mb-6">
+                                <i class="fas fa-brain text-accent-500 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-3">智能大模型融合</h3>
+                            <p class="text-gray-400">
+                                深度整合DEEPSEEK等国产大模型能力，在保护数据安全的同时释放AI的分析价值
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 业务逻辑部分 -->
+            <section id="business-logic" class="relative py-24 gradient-bg overflow-hidden">
+                <!-- 背景装饰 -->
+                <div class="absolute inset-0 grid-bg opacity-20"></div>
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="text-center max-w-3xl mx-auto mb-16 fade-up">
+                        <div
+                            class="inline-block px-4 py-1 bg-accent-500/10 text-accent-500 font-semibold rounded-full text-sm mb-4">
+                            业务架构
+                        </div>
+                        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">业务逻辑架构</h2>
+                        <p class="text-gray-400 text-lg">
+                            一种安全高效易用的智能大数据流通工具，连接多方数据，创造价值
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
+                        <!-- 左侧说明 -->
+                        <div class="lg:col-span-2 space-y-8 fade-up">
+                            <div class="bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700">
+                                <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                                    <div class="h-8 w-8 bg-accent-500 rounded-lg flex items-center justify-center mr-3">
+                                        <i class="fas fa-users text-white"></i>
+                                    </div>
+                                    用户层
+                                </h3>
+                                <ul class="space-y-3 text-gray-300">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check-circle text-accent-500 mt-1 mr-2"></i>
+                                        <span>金融、交通、军工等多行业用户</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check-circle text-accent-500 mt-1 mr-2"></i>
+                                        <span>数据持有方与数据使用方</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check-circle text-accent-500 mt-1 mr-2"></i>
+                                        <span>提供明文数据，获取密文结果</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700">
+                                <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                                    <div class="h-8 w-8 bg-accent-500 rounded-lg flex items-center justify-center mr-3">
+                                        <i class="fas fa-cogs text-white"></i>
+                                    </div>
+                                    技术能力
+                                </h3>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="bg-gray-700/50 hover:bg-gray-700 rounded-lg p-4 transition-colors">
+                                        <div class="text-accent-500 mb-2">
+                                            <i class="fas fa-microchip"></i>
+                                        </div>
+                                        <h4 class="font-medium text-white mb-1">算力资源</h4>
+                                        <p class="text-sm text-gray-400">高性能算力调度</p>
+                                    </div>
+                                    <div class="bg-gray-700/50 hover:bg-gray-700 rounded-lg p-4 transition-colors">
+                                        <div class="text-accent-500 mb-2">
+                                            <i class="fas fa-lock"></i>
+                                        </div>
+                                        <h4 class="font-medium text-white mb-1">隐私计算</h4>
+                                        <p class="text-sm text-gray-400">数据安全保障</p>
+                                    </div>
+                                    <div class="bg-gray-700/50 hover:bg-gray-700 rounded-lg p-4 transition-colors">
+                                        <div class="text-accent-500 mb-2">
+                                            <i class="fas fa-brain"></i>
+                                        </div>
+                                        <h4 class="font-medium text-white mb-1">DEEPSEEK</h4>
+                                        <p class="text-sm text-gray-400">国产大模型能力</p>
+                                    </div>
+                                    <div class="bg-gray-700/50 hover:bg-gray-700 rounded-lg p-4 transition-colors">
+                                        <div class="text-accent-500 mb-2">
+                                            <i class="fas fa-shield-alt"></i>
+                                        </div>
+                                        <h4 class="font-medium text-white mb-1">国产化</h4>
+                                        <p class="text-sm text-gray-400">自主可控技术</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 右侧业务流程图 -->
+                        <div class="lg:col-span-3 fade-up delay-[200ms]">
+                            <div
+                                class="bg-gray-800/60 backdrop-blur-sm rounded-2xl p-8 border border-gray-700 shadow-xl">
+                                <svg class="w-full" viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- 背景网格 -->
+                                    <defs>
+                                        <pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
+                                            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(75, 85, 99, 0.3)"
+                                                stroke-width="0.5" />
+                                        </pattern>
+                                        <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
+                                            <rect width="100" height="100" fill="url(#smallGrid)" />
+                                            <path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(75, 85, 99, 0.5)"
+                                                stroke-width="1" />
+                                        </pattern>
+                                    </defs>
+                                    <rect width="100%" height="100%" fill="url(#grid)" />
+
+                                    <!-- 用户节点 -->
+                                    <g transform="translate(120, 80)">
+                                        <rect x="-60" y="-30" width="120" height="60" rx="10" fill="#1f2937"
+                                            stroke="#374151" stroke-width="2" />
+                                        <text x="0" y="5" text-anchor="middle" font-size="16" font-weight="bold"
+                                            fill="white">用户</text>
+                                    </g>
+
+                                    <!-- 行业节点 -->
+                                    <g transform="translate(300, 80)">
+                                        <rect x="-50" y="-30" width="100" height="60" rx="10" fill="#FF7A00"
+                                            stroke="#E26C00" stroke-width="2" />
+                                        <text x="0" y="5" text-anchor="middle" font-size="16" font-weight="bold"
+                                            fill="white">金融</text>
+                                    </g>
+
+                                    <g transform="translate(420, 80)">
+                                        <rect x="-50" y="-30" width="100" height="60" rx="10" fill="#FF7A00"
+                                            stroke="#E26C00" stroke-width="2" />
+                                        <text x="0" y="5" text-anchor="middle" font-size="16" font-weight="bold"
+                                            fill="white">交通</text>
+                                    </g>
+
+                                    <g transform="translate(540, 80)">
+                                        <rect x="-50" y="-30" width="100" height="60" rx="10" fill="#FF7A00"
+                                            stroke="#E26C00" stroke-width="2" />
+                                        <text x="0" y="5" text-anchor="middle" font-size="16" font-weight="bold"
+                                            fill="white">军工</text>
+                                    </g>
+<!-- 连接线 -->
+<line x1="120" y1="110" x2="300" y2="150" stroke="#4b5563" stroke-width="2" stroke-dasharray="6,6" />
+<line x1="120" y1="110" x2="420" y2="150" stroke="#4b5563" stroke-width="2" stroke-dasharray="6,6" />
+<line x1="120" y1="110" x2="540" y2="150" stroke="#4b5563" stroke-width="2" stroke-dasharray="6,6" />
+
+<!-- 平台节点 -->
+<g transform="translate(300, 220)">
+    <rect x="-200" y="-30" width="400" height="60" rx="10" fill="#172554" stroke="#1e3a8a" stroke-width="2" />
+    <text x="0" y="5" text-anchor="middle" font-size="16" font-weight="bold" fill="white">一种安全高效易用的智能大数据流通工具</text>
+</g>
+
+<!-- 连接线 -->
+<line x1="300" y1="110" x2="300" y2="190" stroke="#4b5563" stroke-width="2" />
+<line x1="420" y1="110" x2="300" y2="190" stroke="#4b5563" stroke-width="2" />
+<line x1="540" y1="110" x2="300" y2="190" stroke="#4b5563" stroke-width="2" />
+
+<!-- 数据流指示 -->
+<g transform="translate(210, 150)">
+    <rect x="-50" y="-15" width="100" height="30" rx="15" fill="#0e172a" stroke="#1e3a8a" stroke-width="1" />
+    <text x="0" y="5" text-anchor="middle" font-size="12" fill="#94a3b8">明文数据</text>
+</g>
+
+<!-- 技术节点 -->
+<g transform="translate(150, 320)">
+    <rect x="-60" y="-30" width="120" height="60" rx="10" fill="#0ea5e9" stroke="#0284c7" stroke-width="2" />
+    <text x="0" y="5" text-anchor="middle" font-size="16" font-weight="bold" fill="white">算力</text>
+</g>
+
+<g transform="translate(300, 320)">
+    <rect x="-60" y="-30" width="120" height="60" rx="10" fill="#0ea5e9" stroke="#0284c7" stroke-width="2" />
+    <text x="0" y="5" text-anchor="middle" font-size="16" font-weight="bold" fill="white">隐私计算</text>
+</g>
+
+<g transform="translate(450, 320)">
+    <rect x="-60" y="-30" width="120" height="60" rx="10" fill="#0ea5e9" stroke="#0284c7" stroke-width="2" />
+    <text x="0" y="5" text-anchor="middle" font-size="16" font-weight="bold" fill="white">DEEPSEEK</text>
+</g>
+
+<!-- 连接线 -->
+<line x1="300" y1="250" x2="150" y2="290" stroke="#4b5563" stroke-width="2" />
+<line x1="300" y1="250" x2="300" y2="290" stroke="#4b5563" stroke-width="2" />
+<line x1="300" y1="250" x2="450" y2="290" stroke="#4b5563" stroke-width="2" />
+
+<!-- 结果节点 -->
+<g transform="translate(300, 420)">
+    <rect x="-120" y="-40" width="240" height="80" rx="10" fill="#FF7A00" stroke="#E26C00" stroke-width="2" />
+    <text x="0" y="-10" text-anchor="middle" font-size="16" font-weight="bold" fill="white">易用性</text>
+    <text x="0" y="15" text-anchor="middle" font-size="16" font-weight="bold" fill="white">安全性 · 高效性</text>
+</g>
+
+<!-- 数据流指示 -->
+<g transform="translate(390, 370)">
+    <rect x="-50" y="-15" width="100" height="30" rx="15" fill="#0e172a" stroke="#1e3a8a" stroke-width="1" />
+    <text x="0" y="5" text-anchor="middle" font-size="12" fill="#94a3b8">密文结果</text>
+</g>
+
+<!-- 连接线 -->
+<line x1="150" y1="350" x2="300" y2="380" stroke="#4b5563" stroke-width="2" />
+<line x1="300" y1="350" x2="300" y2="380" stroke="#4b5563" stroke-width="2" />
+<line x1="450" y1="350" x2="300" y2="380" stroke="#4b5563" stroke-width="2" />
+
+<!-- 装饰点 -->
+<circle cx="120" cy="110" r="5" fill="#FF7A00" />
+<circle cx="300" cy="150" r="5" fill="#FF7A00" />
+<circle cx="420" cy="150" r="5" fill="#FF7A00" />
+<circle cx="540" cy="150" r="5" fill="#FF7A00" />
+<circle cx="300" cy="250" r="5" fill="#0ea5e9" />
+<circle cx="150" cy="290" r="5" fill="#0ea5e9" />
+<circle cx="300" cy="290" r="5" fill="#0ea5e9" />
+<circle cx="450" cy="290" r="5" fill="#0ea5e9" />
+<circle cx="300" cy="380" r="5" fill="#FF7A00" />
+</svg>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 市场现状部分 -->
+<section id="market-status" class="py-24 bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16 fade-up">
+            <div
+                class="inline-block px-4 py-1 bg-accent-500/10 text-accent-500 font-semibold rounded-full text-sm mb-4">
+                行业痛点
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">市场现状与挑战</h2>
+            <p class="text-gray-400 text-lg">
+                在数字经济蓬勃发展的今天，数据价值亟待释放，但仍面临多重障碍
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- 挑战1 -->
+            <div
+                class="card-3d bg-gray-800 rounded-2xl overflow-hidden border border-gray-700 shadow-xl h-full fade-up">
+                <div class="bg-gradient-to-r from-blue-600/10 to-blue-800/10 p-1">
+                    <div class="bg-gray-800 p-6">
+                        <div class="h-12 w-12 bg-blue-600/10 rounded-lg flex items-center justify-center mb-6">
+                            <i class="fas fa-database text-blue-500 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">数据孤岛</h3>
+                        <p class="text-gray-400">
+                            2020年3月，《关于构建更加完善的要素市场化配置体制机制的意见》将数据与土地、劳动力、资本、技术并列为五大生产要素。企业或组织各部门为满足自身需求独立建设信息系统，缺乏统一规划与协调；不同系统技术架构、数据标准不一致，难以实现数据互通；出于安全或利益考量，数据被限制访问与共享，导致数据分散孤立，无法发挥整体价值。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 挑战2 -->
+            <div
+                class="card-3d bg-gray-800 rounded-2xl overflow-hidden border border-gray-700 shadow-xl h-full fade-up delay-[200ms]">
+                <div class="bg-gradient-to-r from-accent-500/10 to-orange-600/10 p-1">
+                    <div class="bg-gray-800 p-6">
+                        <div class="h-12 w-12 bg-accent-500/10 rounded-lg flex items-center justify-center mb-6">
+                            <i class="fas fa-microchip text-accent-500 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">算力制约</h3>
+                        <p class="text-gray-400">
+                            随着人工智能产业的发展，2023年以来对高端AI芯片的需求日益增加，但在高端AI芯片领域极大程度上依赖进口，如英伟达的B200、H200、RTX4090等高性能GPU，相关国家对相关先进芯片出口有严格限制，且国内自主研发的高性能芯片在产能和性能上有待提升。故国内目前拥有进口高端AI芯片的公司多小而分散，多为灰色渠道流入国内，难以形成规模，市场销售内卷严重。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 挑战3 -->
+            <div
+                class="card-3d bg-gray-800 rounded-2xl overflow-hidden border border-gray-700 shadow-xl h-full fade-up delay-[400ms]">
+                <div class="bg-gradient-to-r from-purple-600/10 to-purple-800/10 p-1">
+                    <div class="bg-gray-800 p-6">
+                        <div class="h-12 w-12 bg-purple-600/10 rounded-lg flex items-center justify-center mb-6">
+                            <i class="fas fa-tachometer-alt text-purple-500 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">计算开销</h3>
+                        <p class="text-gray-400">
+                            隐私计算常使用的技术，涉及大量复杂的数学运算，加密和解密过程计算量巨大，对大规模数据进行隐私计算，需处理海量数据位，加之参与方需多次交互数据，网络通信的时间和资源成本高，数据传输中的加密、校验等操作也会增加计算量，影响整体效率导致计算开销大幅增加。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 解决方案部分 -->
+<section id="solutions" class="relative py-24 gradient-bg overflow-hidden">
+    <!-- 背景装饰 -->
+    <div class="absolute inset-0 grid-bg opacity-20"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center max-w-3xl mx-auto mb-16 fade-up">
+            <div
+                class="inline-block px-4 py-1 bg-accent-500/10 text-accent-500 font-semibold rounded-full text-sm mb-4">
+                创新突破
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">可解决问题</h2>
+            <p class="text-gray-400 text-lg">
+                通过技术创新与产品整合，打破行业壁垒，释放数据价值
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-12">
+            <!-- 解决方案1 -->
+            <div class="bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 shadow-xl fade-up">
+                <div class="flex items-start space-x-6">
+                    <div
+                        class="flex-shrink-0 h-14 w-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
+                        <i class="fas fa-brain text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-3">大模型赋能</h3>
+                        <p class="text-gray-400">
+                            2025年初以DEEPSEEK为代表的国产开源大模型问世。随着该项技术的逐渐普及，深度挖掘数据要素价值的意义显现明显，凭借强大分析能力，让数据从孤岛分散走向高效整合利用，拓展数据应用场景，激发创新。在算力消纳上，吸引众多开发者与企业基于模型开展应用开发，带动算力需求，促进算力资源充分利用，推动算力产业良性循环。对于隐私计算技术，开源大模型的社区生态能汇聚各方智慧，共同探索在保护隐私前提下提升模型性能的方法，加速隐私计算技术迭代，使数据在安全环境下流通共享，为数字经济发展筑牢根基。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 解决方案2 -->
+            <div
+                class="bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 shadow-xl fade-up delay-[200ms]">
+                <div class="flex items-start space-x-6">
+                    <div
+                        class="flex-shrink-0 h-14 w-14 bg-gradient-to-br from-accent-500 to-amber-600 rounded-lg flex items-center justify-center shadow-lg">
+                        <i class="fas fa-shield-alt text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-3">密态计算+大模型</h3>
+                        <p class="text-gray-400 mb-4">
+                            解决大模型调用数据时的安全问题，保证数据使用的合规性，保证数据流通中数据价值不被稀释。
+                        </p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-gray-700/50 rounded-lg p-3">
+                                <p class="text-sm text-gray-300"><i class="fas fa-check text-accent-500 mr-2"></i>数据安全保障
+                                </p>
+                            </div>
+                            <div class="bg-gray-700/50 rounded-lg p-3">
+                                <p class="text-sm text-gray-300"><i class="fas fa-check text-accent-500 mr-2"></i>价值提取能力
+                                </p>
+                            </div>
+                            <div class="bg-gray-700/50 rounded-lg p-3">
+                                <p class="text-sm text-gray-300"><i class="fas fa-check text-accent-500 mr-2"></i>合规性保证
+                                </p>
+                            </div>
+                            <div class="bg-gray-700/50 rounded-lg p-3">
+                                <p class="text-sm text-gray-300"><i class="fas fa-check text-accent-500 mr-2"></i>多方可信协作
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 解决方案3 -->
+            <div
+                class="bg-gray-800/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 shadow-xl fade-up delay-[300ms]">
+                <div class="flex items-start space-x-6">
+                    <div
+                        class="flex-shrink-0 h-14 w-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center shadow-lg">
+                        <i class="fas fa-bolt text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-3">密态计算+算力</h3>
+                        <p class="text-gray-400">
+                            解决因加密后数据膨胀导致计算效率下降问题。通过优化异构算力调度，深度融合国产化硬件资源，与密态计算技术协同设计，显著提升大规模密文数据处理效率，降低因加密运算带来的额外开销，实现高性能隐私计算。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 综合解决方案 -->
+            <div
+                class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 border border-gray-700 shadow-xl fade-up delay-[400ms]">
+                <h3 class="text-2xl font-bold text-white mb-6 text-center">密态计算 + 算力 + 大模型</h3>
+                <div class="flex items-center justify-center mb-6">
+                    <div class="text-2xl text-white">=</div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <div class="bg-gray-700/40 rounded-lg p-3 text-center">
+                        <p class="text-sm text-white"><i class="fas fa-lock text-accent-500 block mb-2 text-lg"></i>数据安全
+                        </p>
+                    </div>
+                    <div class="bg-gray-700/40 rounded-lg p-3 text-center">
+                        <p class="text-sm text-white"><i
+                                class="fas fa-chart-line text-accent-500 block mb-2 text-lg"></i>数据价值</p>
+                    </div>
+                    <div class="bg-gray-700/40 rounded-lg p-3 text-center">
+                        <p class="text-sm text-white"><i
+                                class="fas fa-tachometer-alt text-accent-500 block mb-2 text-lg"></i>计算效率</p>
+                    </div>
+                    <div class="bg-gray-700/40 rounded-lg p-3 text-center">
+                        <p class="text-sm text-white"><i
+                                class="fas fa-microchip text-accent-500 block mb-2 text-lg"></i>算力整合</p>
+                    </div>
+                </div>
+                <div class="bg-accent-500 text-white p-4 rounded-xl text-center shadow-lg shadow-accent-500/20">
+                    <p class="text-lg font-semibold">一种安全高效易用的智能大数据流通工具</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 适用场景部分 -->
+<section id="scenarios" class="py-24 bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16 fade-up">
+            <div
+                class="inline-block px-4 py-1 bg-accent-500/10 text-accent-500 font-semibold rounded-full text-sm mb-4">
+                应用领域
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">适用场景</h2>
+            <p class="text-gray-400 text-lg">
+                针对不同行业的数据需求，提供精准解决方案
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- 场景1 -->
+            <!-- <div class="bg-gray-800 rounded-2xl overflow-hidden border border-gray-700 shadow-xl fade-up">
+                <div class="bg-gradient-to-r from-accent-500 to-accent-600 py-4 px-6">
+                    <h3 class="text-xl font-bold text-white">案例1：保险公司+导航APP</h3>
+                </div>
+                <div class="p-6 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gray-700/50 rounded-xl p-4 border border-gray-700">
+                            <div class="flex items-start space-x-3">
+                                <div
+                                    class="flex-shrink-0 h-10 w-10 bg-blue-500/20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-building text-blue-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white mb-2">用户1: 保险公司</h4>
+                                    <ul class="space-y-2 text-sm text-gray-300">
+                                        <li class="flex items-center">
+                                            <i class="fas fa-arrow-right text-accent-500 text-xs mr-2"></i>
+                                            <span>计算结果优化业务</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fas fa-arrow-right text-accent-500 text-xs mr-2"></i>
+                                            <span>获得间接收益</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-700/50 rounded-xl p-4 border border-gray-700">
+                            <div class="flex items-start space-x-3">
+                                <div
+                                    class="flex-shrink-0 h-10 w-10 bg-green-500/20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-location-arrow text-green-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white mb-2">用户2: 导航应用</h4>
+                                    <ul class="space-y-2 text-sm text-gray-300">
+                                        <li class="flex items-center">
+                                            <i class="fas fa-arrow-right text-accent-500 text-xs mr-2"></i>
+                                            <span>释放数据价值</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fas fa-arrow-right text-accent-500 text-xs mr-2"></i>
+                                            <span>获得直接收益</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute left-8 h-full w-0.5 bg-gray-700"></div>
+                        <div class="space-y-8 relative">
+                            <div class="flex">
+                                <div
+                                    class="flex-shrink-0 h-16 w-16 bg-gray-700 rounded-full border-4 border-gray-800 z-10 flex items-center justify-center shadow-xl">
+                                    <i class="fas fa-map-marked-alt text-accent-500 text-xl"></i>
+                                </div>
+                                <div class="ml-6 pt-3">
+                                    <h4 class="text-white font-medium mb-2">数据收集</h4>
+                                    <p class="text-gray-400 text-sm">某一范围内的行驶数据（车速、时间、车流密集度等）</p>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div
+                                    class="flex-shrink-0 h-16 w-16 bg-gray-700 rounded-full border-4 border-gray-800 z-10 flex items-center justify-center shadow-xl">
+                                    <i class="fas fa-shield-alt text-accent-500 text-xl"></i>
+                                </div>
+                                <div class="ml-6 pt-3">
+                                    <h4 class="text-white font-medium mb-2">密态处理</h4>
+                                    <div class="bg-accent-500/10 border border-accent-500/20 rounded-lg p-3">
+                                        <p class="text-accent-500 text-sm">一种安全高效易用的智能大数据流通工具</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div
+                                    class="flex-shrink-0 h-16 w-16 bg-gray-700 rounded-full border-4 border-gray-800 z-10 flex items-center justify-center shadow-xl">
+                                    <i class="fas fa-chart-pie text-accent-500 text-xl"></i>
+                                </div>
+                                <div class="ml-6 pt-3">
+                                    <h4 class="text-white font-medium mb-2">结果应用</h4>
+                                    <p class="text-gray-400 text-sm">得出某一范围内的事故概率、驾驶疲劳程度等结果，从而优化业务</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+                        <!-- 场景1 -->
+                        <div class="bg-gray-800 rounded-2xl overflow-hidden border border-gray-700 shadow-xl fade-up">
+                            <div class="bg-gradient-to-r from-accent-500 to-accent-600 py-4 px-6">
+                                <h3 class="text-xl font-bold text-white">案例1：保险公司+导航APP</h3>
+                            </div>
+                            <div class="p-6 space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="bg-gray-700/50 rounded-xl p-4 border border-gray-700">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="flex-shrink-0 h-10 w-10 bg-blue-500/20 rounded-full flex items-center justify-center">
+                                                <i class="fas fa-building text-blue-400"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-bold text-white mb-2">用户1: 保险公司</h4>
+                                                <ul class="space-y-2 text-sm text-gray-300">
+                                                    <li class="flex items-center">
+                                                        <i class="fas fa-arrow-right text-accent-500 text-xs mr-2"></i>
+                                                        <span>计算结果优化业务</span>
+                                                    </li>
+                                                    <li class="flex items-center">
+                                                        <i class="fas fa-arrow-right text-accent-500 text-xs mr-2"></i>
+                                                        <span>获得间接收益</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-700/50 rounded-xl p-4 border border-gray-700">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="flex-shrink-0 h-10 w-10 bg-green-500/20 rounded-full flex items-center justify-center">
+                                                <i class="fas fa-location-arrow text-green-400"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-bold text-white mb-2">用户2: 导航应用</h4>
+                                                <ul class="space-y-2 text-sm text-gray-300">
+                                                    <li class="flex items-center">
+                                                        <i class="fas fa-arrow-right text-accent-500 text-xs mr-2"></i>
+                                                        <span>释放数据价值</span>
+                                                    </li>
+                                                    <li class="flex items-center">
+                                                        <i class="fas fa-arrow-right text-accent-500 text-xs mr-2"></i>
+                                                        <span>获得直接收益</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gray-900/50 rounded-xl p-6 border border-gray-700">
+                                    <svg class="w-full" viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+                                        <!-- 背景 -->
+                                        <rect width="100%" height="100%" fill="#1f2937" />
+                                        
+                                        <!-- 网格背景 -->
+                                        <defs>
+                                            <pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
+                                                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(75, 85, 99, 0.2)" stroke-width="0.5"/>
+                                            </pattern>
+                                        </defs>
+                                        <rect width="100%" height="100%" fill="url(#smallGrid)" opacity="0.3" />
+                                        
+                                        <!-- 左侧：保险公司 -->
+                                        <g transform="translate(100, 40)">
+                                            <rect x="-70" y="-25" width="140" height="50" rx="8" fill="#1e40af" stroke="#2563eb" stroke-width="2" />
+                                            <text x="0" y="5" text-anchor="middle" font-size="14" font-weight="bold" fill="white">保险公司</text>
+                                        </g>
+                                        
+                                        <!-- 右侧：导航APP -->
+                                        <g transform="translate(400, 40)">
+                                            <rect x="-70" y="-25" width="140" height="50" rx="8" fill="#047857" stroke="#059669" stroke-width="2" />
+                                            <text x="0" y="5" text-anchor="middle" font-size="14" font-weight="bold" fill="white">导航APP</text>
+                                        </g>
+                                        
+                                        <!-- 中心：数据处理平台 -->
+                                        <g transform="translate(250, 150)">
+                                            <rect x="-150" y="-30" width="300" height="60" rx="8" fill="#172554" stroke="#1e3a8a" stroke-width="2" />
+                                            <text x="0" y="5" text-anchor="middle" font-size="14" font-weight="bold" fill="white">一种安全高效易用的智能大数据流通工具</text>
+                                        </g>
+                                        
+                                        <!-- 连接线：导航APP到平台 -->
+                                        <line x1="400" y1="65" x2="300" y2="120" stroke="#4b5563" stroke-width="2" />
+                                        
+                                        <!-- 连接线：平台到保险公司 -->
+                                        <line x1="200" y1="120" x2="100" y2="65" stroke="#4b5563" stroke-width="2" />
+                                        
+                                        <!-- 数据类型标签：导航数据 -->
+                                        <g transform="translate(350, 90)">
+                                            <rect x="-50" y="-15" width="100" height="30" rx="15" fill="#0e172a" stroke="#1e3a8a" stroke-width="1" />
+                                            <text x="0" y="5" text-anchor="middle" font-size="12" fill="#94a3b8">行驶数据</text>
+                                        </g>
+                                        
+                                        <!-- 数据类型标签：结果数据 -->
+                                        <g transform="translate(150, 90)">
+                                            <rect x="-50" y="-15" width="100" height="30" rx="15" fill="#0e172a" stroke="#1e3a8a" stroke-width="1" />
+                                            <text x="0" y="5" text-anchor="middle" font-size="12" fill="#94a3b8">事故概率分析</text>
+                                        </g>
+
+                                        <!-- 底部：优化业务节点 -->
+                                        <g transform="translate(250, 250)">
+                                            <rect x="-120" y="-25" width="240" height="50" rx="8" fill="#FF7A00" stroke="#E26C00" stroke-width="2" />
+                                            <text x="0" y="5" text-anchor="middle" font-size="14" font-weight="bold" fill="white">业务优化与价值创造</text>
+                                        </g>
+                                        
+                                        <!-- 连接线：平台到优化结果 -->
+                                        <line x1="250" y1="180" x2="250" y2="225" stroke="#4b5563" stroke-width="2" />
+                                        
+                                        <!-- 数据流指示 -->
+                                        <g transform="translate(150, 200)">
+                                            <text text-anchor="middle" font-size="12" fill="#94a3b8">驾驶疲劳评估</text>
+                                        </g>
+                                        
+                                        <g transform="translate(350, 200)">
+                                            <text text-anchor="middle" font-size="12" fill="#94a3b8">道路风险预测</text>
+                                        </g>
+                                        
+                                        <!-- 装饰点 -->
+                                        <circle cx="100" cy="40" r="4" fill="#2563eb" />
+                                        <circle cx="400" cy="40" r="4" fill="#059669" />
+                                        <circle cx="250" cy="150" r="4" fill="#0ea5e9" />
+                                        <circle cx="250" cy="250" r="4" fill="#FF7A00" />
+                                        <circle cx="300" cy="120" r="3" fill="#94a3b8" />
+                                        <circle cx="200" cy="120" r="3" fill="#94a3b8" />
+                                        <circle cx="250" cy="225" r="3" fill="#94a3b8" />
+                                    </svg>
+                                </div>
+                                
+                                <div class="bg-gray-700/50 rounded-lg p-4 border border-gray-700">
+                                    <h4 class="text-white font-bold mb-3">业务流程</h4>
+                                    <ol class="space-y-2 text-gray-300 ml-5 list-decimal">
+                                        <li>导航APP提供某一范围内的行驶数据（车速、时间、车流密集度等）</li>
+                                        <li>平台通过密态计算技术安全处理数据</li>
+                                        <li>为保险公司生成事故概率、驾驶疲劳程度等分析结果</li>
+                                        <li>保险公司基于分析结果优化业务，导航APP获得数据变现收益</li>
+                                    </ol>
+                                </div>
+                                <div class="bg-gray-700/50 rounded-lg p-4 border border-gray-700">
+                                    <div class="flex items-center space-x-3 mb-3">
+                                        <div class="flex-shrink-0 h-8 w-8 bg-green-500/20 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-check text-green-400"></i>
+                                        </div>
+                                        <h4 class="text-white font-bold">核心价值</h4>
+                                    </div>
+                                    <p class="text-gray-300">通过安全可信的数据流通，实现双方互利共赢：保险公司获得更精准的风险评估数据从而优化保险产品定价与理赔策略；导航APP则将沉睡的数据资产转化为直接商业价值，同时保障用户隐私与数据安全。</p>
+                                </div>
+                            </div>
+                        </div>
+            <!-- 场景2 -->
+            <div class="bg-gray-800 rounded-2xl overflow-hidden border border-gray-700 shadow-xl fade-up delay-[200ms]">
+                <div class="bg-gradient-to-r from-accent-500 to-accent-600 py-4 px-6">
+                    <h3 class="text-xl font-bold text-white">案例2：IDC安全硬件销售</h3>
+                </div>
+                <div class="p-6 space-y-6">
+                    <div class="bg-gray-900/50 rounded-xl p-6 border border-gray-700">
+                        <svg class="w-full" viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+                            <!-- 背景 -->
+                            <rect width="100%" height="100%" fill="#1f2937" />
+
+                            <!-- 网格背景 -->
+                            <defs>
+                                <pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
+                                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(75, 85, 99, 0.2)"
+                                        stroke-width="0.5" />
+                                </pattern>
+                            </defs>
+                            <rect width="100%" height="100%" fill="url(#smallGrid)" opacity="0.3" />
+
+                            <!-- 中心平台节点 -->
+                            <g transform="translate(250, 80)">
+                                <rect x="-150" y="-25" width="300" height="50" rx="8" fill="#172554" stroke="#1e3a8a"
+                                    stroke-width="2" />
+                                <text x="0" y="5" text-anchor="middle" font-size="14" font-weight="bold"
+                                    fill="white">一种安全高效易用的智能大数据流通工具</text>
+                            </g>
+
+                            <!-- IDC节点 -->
+                            <g transform="translate(100, 170)">
+                                <rect x="-50" y="-25" width="100" height="50" rx="8" fill="#FF7A00" stroke="#E26C00"
+                                    stroke-width="2" />
+                                <text x="0" y="5" text-anchor="middle" font-size="14" font-weight="bold"
+                                    fill="white">IDC1</text>
+                            </g>
+
+                            <g transform="translate(400, 170)">
+                                <rect x="-50" y="-25" width="100" height="50" rx="8" fill="#FF7A00" stroke="#E26C00"
+                                    stroke-width="2" />
+                                <text x="0" y="5" text-anchor="middle" font-size="14" font-weight="bold"
+                                    fill="white">IDC2</text>
+                            </g>
+
+                            <!-- 连接线 -->
+                            <line x1="250" y1="105" x2="100" y2="145" stroke="#4b5563" stroke-width="2" />
+                            <line x1="250" y1="105" x2="400" y2="145" stroke="#4b5563" stroke-width="2" />
+
+                            <!-- 终端节点 -->
+                            <g transform="translate(50, 250)">
+                                <rect x="-25" y="-15" width="50" height="30" rx="5" fill="#374151" stroke="#4b5563"
+                                    stroke-width="1" />
+                            </g>
+
+                            <g transform="translate(120, 250)">
+                                <rect x="-25" y="-15" width="50" height="30" rx="5" fill="#374151" stroke="#4b5563"
+                                    stroke-width="1" />
+                            </g>
+
+                            <g transform="translate(190, 250)">
+                                <rect x="-25" y="-15" width="50" height="30" rx="5" fill="#374151" stroke="#4b5563"
+                                    stroke-width="1" />
+                            </g>
+
+                            <g transform="translate(310, 250)">
+                                <rect x="-25" y="-15" width="50" height="30" rx="5" fill="#374151" stroke="#4b5563"
+                                    stroke-width="1" />
+                            </g>
+
+                            <g transform="translate(380, 250)">
+                                <rect x="-25" y="-15" width="50" height="30" rx="5" fill="#374151" stroke="#4b5563"
+                                    stroke-width="1" />
+                            </g>
+
+                            <g transform="translate(450, 250)">
+                                <rect x="-25" y="-15" width="50" height="30" rx="5" fill="#374151" stroke="#4b5563"
+                                    stroke-width="1" />
+                            </g>
+
+                            <!-- 连接线 -->
+                            <line x1="100" y1="195" x2="50" y2="235" stroke="#4b5563" stroke-width="1"
+                                stroke-dasharray="4,4" />
+                            <line x1="100" y1="195" x2="120" y2="235" stroke="#4b5563" stroke-width="1"
+                                stroke-dasharray="4,4" />
+                            <line x1="100" y1="195" x2="190" y2="235" stroke="#4b5563" stroke-width="1"
+                                stroke-dasharray="4,4" />
+
+                            <line x1="400" y1="195" x2="310" y2="235" stroke="#4b5563" stroke-width="1"
+                                stroke-dasharray="4,4" />
+                            <line x1="400" y1="195" x2="380" y2="235" stroke="#4b5563" stroke-width="1"
+                                stroke-dasharray="4,4" />
+                            <line x1="400" y1="195" x2="450" y2="235" stroke="#4b5563" stroke-width="1"
+                                stroke-dasharray="4,4" />
+
+                            <!-- 装饰点 -->
+                            <circle cx="250" cy="105" r="4" fill="#0ea5e9" />
+                            <circle cx="100" cy="145" r="4" fill="#FF7A00" />
+                            <circle cx="400" cy="145" r="4" fill="#FF7A00" />
+                        </svg>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div
+                            class="flex items-center justify-between bg-gray-700/50 rounded-lg p-4 border border-gray-700">
+                            <div class="flex items-center space-x-3">
+                                <div class="h-10 w-10 bg-accent-500/20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-server text-accent-500"></i>
+                                </div>
+                                <span class="text-white font-medium">产品: SaaS服务或硬件</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div class="h-10 w-10 bg-blue-500/20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-building text-blue-400"></i>
+                                </div>
+                                <span class="text-white font-medium">IDC服务商</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-700/50 rounded-lg p-4 border border-gray-700">
+                            <h4 class="text-white font-bold mb-3">业务流程</h4>
+                            <ol class="space-y-2 text-gray-300 ml-5 list-decimal">
+                                <li>IDC服务商采购密态人工智能计算平台</li>
+                                <li>将平台部署在数据中心环境</li>
+                                <li>为客户提供安全、高效的数据处理服务</li>
+                                <li>客户通过平台实现跨域数据安全流通与价值挖掘</li>
+                            </ol>
+                        </div>
+
+                        <div class="bg-gray-700/50 rounded-lg p-4 border border-gray-700">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div
+                                    class="flex-shrink-0 h-8 w-8 bg-green-500/20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-check text-green-400"></i>
+                                </div>
+                                <h4 class="text-white font-bold">核心价值</h4>
+                            </div>
+                            <p class="text-gray-300">通过硬件销售与服务整合，构建安全、高效的数据计算环境，帮助IDC服务商提升业务附加值，同时满足终端客户对数据安全与隐私保护的需求。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 业务模式部分 -->
+<section id="business-model" class="relative py-24 gradient-bg overflow-hidden">
+    <!-- 背景装饰 -->
+    <div class="absolute inset-0 grid-bg opacity-20"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- 业务模式 -->
+            <div>
+                <div class="mb-12 fade-up">
+                    <div
+                        class="inline-block px-4 py-1 bg-accent-500/10 text-accent-500 font-semibold rounded-full text-sm mb-4">
+                        商业策略
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">业务模式</h2>
+                    <p class="text-gray-400 text-lg">
+                        灵活多样的商业模式，满足不同场景下的客户需求
+                    </p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="card-3d bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 fade-up">
+                        <div class="flex items-start space-x-5">
+                            <div
+                                class="flex-shrink-0 h-14 w-14 bg-blue-500/10 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-cloud text-blue-500 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white mb-3">SaaS服务</h3>
+                                <p class="text-gray-400">
+                                    平台以SaaS（软件即服务）模式向用户提供登录即用的密态人工智能计算能力，支持按需订阅、弹性扩展。用户可通过云端快速接入隐私计算、大模型训练与推理等服务，无需自建复杂基础设施。该模式适用于中小型企业等领域，通过标准化API与模块化功能设计，助力企业实现数据安全流通与智能化升级，同时降低运维成本。
+                                </p>
+                                <div class="mt-4 flex">
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-500/20 text-blue-400">按量计费</span>
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-500/20 text-blue-400 ml-2">无需硬件投入</span>
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-500/20 text-blue-400 ml-2">快速部署</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="card-3d bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 fade-up delay-[200ms]">
+                        <div class="flex items-start space-x-5">
+                            <div
+                                class="flex-shrink-0 h-14 w-14 bg-accent-500/10 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-server text-accent-500 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white mb-3">硬件融合</h3>
+                                <p class="text-gray-400">
+                                    深度融合国产化硬件资源（如自主可控芯片、高性能服务器等），优化异构算力调度能力，兼容主流云环境及私有化部署场景。通过软硬协同设计，提升隐私计算任务的执行效率，减少因加密运算带来的额外开销，确保大规模数据处理场景下的稳定性和实时性，满足政府部门及大型企业对算力资源的高效利用需求。
+                                </p>
+                                <div class="mt-4 flex">
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-accent-500/20 text-accent-500">本地部署</span>
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-accent-500/20 text-accent-500 ml-2">数据自主可控</span>
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-accent-500/20 text-accent-500 ml-2">高性能</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 优势分析 -->
+            <div>
+                <div class="mb-12 fade-up delay-[200ms]">
+                    <div
+                        class="inline-block px-4 py-1 bg-accent-500/10 text-accent-500 font-semibold rounded-full text-sm mb-4">
+                        核心优势
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">优势分析</h2>
+                    <p class="text-gray-400 text-lg">
+                        差异化的产品定位，构建市场竞争壁垒
+                    </p>
+                </div>
+
+                <div class="space-y-6">
+                    <div
+                        class="card-3d bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 fade-up delay-[300ms]">
+                        <div class="flex items-start space-x-5">
+                            <div
+                                class="flex-shrink-0 h-14 w-14 bg-blue-500/10 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-building text-blue-500 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white mb-3">企业级</h3>
+                                <p class="text-gray-400">
+                                    平台提供企业级高可靠服务，支持PB级数据吞吐与毫秒级响应，具备容灾备份、多租户隔离及细粒度权限管理功能。通过定制化解决方案，适配不同行业场景的复杂需求，保障关键业务连续性，助力企业构建安全、高效的智能化数据生态。
+                                </p>
+                                <div class="mt-4 grid grid-cols-2 gap-3">
+                                    <div class="bg-gray-700/50 p-3 rounded-lg">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-database text-purple-400 mr-2"></i>
+                                            <span class="text-white text-sm">PB级数据处理</span>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-700/50 p-3 rounded-lg">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-bolt text-purple-400 mr-2"></i>
+                                            <span class="text-white text-sm">毫秒级响应</span>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-700/50 p-3 rounded-lg">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-users-cog text-purple-400 mr-2"></i>
+                                            <span class="text-white text-sm">多租户隔离</span>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-700/50 p-3 rounded-lg">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-shield-alt text-purple-400 mr-2"></i>
+                                            <span class="text-white text-sm">细粒度权限</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="card-3d bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 fade-up delay-[400ms]">
+                        <div class="flex items-start space-x-5">
+                            <div
+                                class="flex-shrink-0 h-14 w-14 bg-blue-500/10 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-flag text-accent-500 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white mb-3">国产化</h3>
+                                <p class="text-gray-400">
+                                    基于国产自主可控技术架构，严格遵循国内数据安全法规，适配本土化硬件与操作系统生态。通过自主研发的隐私计算引擎与算法模型，打破海外技术依赖，确保核心数据资产的安全可控，同时贴合国内市场对合规性、可追溯性的高标准要求。
+                                </p>
+                                <div class="mt-4">
+                                    <div class="bg-gradient-to-r from-accent-500/20 to-amber-600/20 p-4 rounded-lg">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-check-circle text-accent-500 mr-3"></i>
+                                            <span class="text-white">符合国家安全合规要求，打破技术封锁</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA部分 -->
+<section id="contact-us" class="relative py-24 bg-gray-900 overflow-hidden">
+    <!-- 背景效果 -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-1/4 -left-20 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-1/3 right-0 w-80 h-80 bg-accent-500/10 rounded-full blur-3xl"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="max-w-3xl mx-auto text-center fade-up">
+            <div
+                class="inline-block px-4 py-1 bg-accent-500/10 text-accent-500 font-semibold rounded-full text-sm mb-6">
+                行动起来
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">成为数字经济时代的先行者</h2>
+            <p class="text-xl text-gray-300 mb-10">
+                通过SMBM密态人工智能计算平台，安全高效地挖掘数据价值，驱动业务创新
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#"
+                    class="inline-flex items-center px-8 py-3 bg-accent-500 hover:bg-accent-600 text-white font-medium rounded-md shadow-lg hover:shadow-accent-500/30 transition-all">
+                    申请演示
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+                <a href="#"
+                    class="inline-flex items-center px-8 py-3 bg-gray-800 hover:bg-gray-700 text-white font-medium rounded-md shadow-lg transition-all">
+                    联系我们
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+</main>
+
+<!-- 页脚部分 -->
+<footer class="bg-gray-900 border-t border-gray-800 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div class="col-span-1 md:col-span-1">
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="h-10 w-10 bg-accent-500 rounded-md flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">SM</span>
+                    </div>
+                    <span class="text-xl font-bold text-white">SMBM</span>
+                </div>
+                <p class="text-gray-400 mb-6">密态人工智能计算平台</p>
+                <div class="flex space-x-4">
+                    <a href="https://x.com/logic_zy" target="_blank" rel="noopener noreferrer"
+                        class="h-10 w-10 bg-gray-800 hover:bg-gray-700 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#"
+                        class="h-10 w-10 bg-gray-800 hover:bg-gray-700 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#"
+                        class="h-10 w-10 bg-gray-800 hover:bg-gray-700 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-span-1">
+                <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">解决方案</h3>
+                <ul class="space-y-3">
+                    <li><a href="#" class="text-gray-400 hover:text-accent-500 transition-colors">密态计算</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-accent-500 transition-colors">大模型应用</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-accent-500 transition-colors">数据安全</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-accent-500 transition-colors">算力资源</a></li>
+                </ul>
+            </div>
+
+            <div class="col-span-1">
+                <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">行业应用</h3>
+                <ul class="space-y-3">
+                    <li><a href="#" class="text-gray-400 hover:text-accent-500 transition-colors">金融行业</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-accent-500 transition-colors">交通行业</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-accent-500 transition-colors">军工行业</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-accent-500 transition-colors">智慧城市</a></li>
+                </ul>
+            </div>
+
+            <div class="col-span-1">
+                <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">联系我们</h3>
+                <ul class="space-y-3">
+                    <li class="flex items-start">
+                        <i class="fas fa-envelope text-accent-500 mt-1 mr-3"></i>
+                        <a href="mailto:contact@smbm.ai"
+                            class="text-gray-400 hover:text-accent-500 transition-colors">contact@smbm.ai</a>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-phone-alt text-accent-500 mt-1 mr-3"></i>
+                        <span class="text-gray-400">+86 123 456 7890</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-map-marker-alt text-accent-500 mt-1 mr-3"></i>
+                        <span class="text-gray-400">北京市海淀区科技园区</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mt-12 pt-8 border-t border-gray-800">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-sm text-gray-500">
+                        © 2025 <a href="https://x.com/logic_zy" target="_blank" rel="noopener noreferrer"
+                            class="text-accent-500 hover:text-accent-400">治一</a>. 保留所有权利.
+                    </p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-sm text-gray-500 hover:text-accent-500 transition-colors">隐私政策</a>
+                    <a href="#" class="text-sm text-gray-500 hover:text-accent-500 transition-colors">使用条款</a>
+                    <a href="#" class="text-sm text-gray-500 hover:text-accent-500 transition-colors">Cookie 政策</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+
+<!-- JavaScript -->
+<script>
+    // 移动端菜单控制
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // 平滑滚动到锚点
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80, // 考虑固定导航栏的高度
+                    behavior: 'smooth'
+                });
+
+                // 关闭移动端菜单
+                mobileMenu.classList.add('hidden');
+            }
+        });
+    });
+
+    // 动画效果
+    document.addEventListener('DOMContentLoaded', () => {
+        // 处理图片加载完成
+        document.querySelectorAll('img, svg').forEach(img => {
+            img.onload = function () {
+                this.classList.add('loaded');
+            };
+
+            // 如果已经加载完成
+            if (img.complete) {
+                img.classList.add('loaded');
+            }
+        });
+
+        // 页面滚动动画
+        const fadeElements = document.querySelectorAll('.fade-up');
+
+        const fadeInOnScroll = () => {
+            const triggerBottom = window.innerHeight * 0.85;
+
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                if (elementTop < triggerBottom) {
+                    element.style.opacity = "1";
+                    element.style.transform = "translateY(0)";
+                }
+            });
+        };
+
+        // 初始检查
+        fadeInOnScroll();
+
+        // 滚动监听
+        window.addEventListener('scroll', fadeInOnScroll);
+    });
+</script>
+</body>
+
+</html>
+<!DOCTYPE html>
+
+
+
+
